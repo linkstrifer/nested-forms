@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>HTML + CSS</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body
+    class="flex flex-col bg-purple-400 items-center justify-center min-h-screen gap-4"
+  >
+    <div class="flex gap-2 flex-col bg-blue-400 p-4 rounded">
+      <input name="email" type="email" form="form-1" class="w-full bg-white" />
+
+      <button class="bg-slate-800 text-white p-2 rounded" form="form-2">
+        clear
+      </button>
+
+      <button class="bg-slate-800 text-white p-2 rounded" form="form-1">
+        submit
+      </button>
+
+      <form id="form-1"></form>
+
+      <form id="form-2"></form>
+    </div>
+
+    <div class="flex flex-col gap-2 bg-blue-400 p-4 rounded">
+      <form id="form-3" class="w-full">
+        <input name="email" type="email" class="w-full bg-white" />
+      </form>
+      <form class="w-full flex">
+        <button class="bg-slate-800 text-white p-2 rounded w-full">
+          clear
+        </button>
+      </form>
+
+      <button class="bg-slate-800 text-white p-2 rounded" form="form-3">
+        submit
+      </button>
+    </div>
+
+    <script>
+      (function () {
+        const forms = document.querySelectorAll("form");
+
+        forms.forEach((form) => {
+          form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const action = this.getAttribute("action") || window.location.href;
+            const method = this.getAttribute("method") || "GET";
+
+            const formData = new FormData(this);
+
+            const payload = {};
+
+            formData.forEach((value, key) => {
+              if (payload[key]) {
+                if (!Array.isArray(payload[key])) {
+                  payload[key] = [payload[key]];
+                }
+                payload[key].push(value);
+              } else {
+                payload[key] = value;
+              }
+            });
+
+            console.group(`📝 Form Submission: ${this.id || "Unnamed Form"}`);
+            console.log(
+              `URL:    %c${action}`,
+              "color: #007bff; font-weight: bold;"
+            );
+            console.log(
+              `Method: %c${method.toUpperCase()}`,
+              "color: #28a745; font-weight: bold;"
+            );
+            console.log("Data:", payload);
+            console.groupEnd();
+          });
+        });
+
+        console.log(`✅ Form Logger Active: Watching ${forms.length} form(s).`);
+      })();
+    </script>
+  </body>
+</html>
